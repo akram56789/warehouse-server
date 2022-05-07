@@ -36,6 +36,13 @@ async function run() {
            const result = await productCollection.insertOne(newProduct);
            res.send(result);
        });
+       //restock api
+    //    app.post('/product/:id', async(req, res)=>{
+    //        const id = req.params.id;
+    //        const query = {_id: ObjectId(id)}
+    //        const result = await productCollection.insertOne(query);
+    //        res.send(result)
+    //    })
        //delete api
        app.delete('/product/:id', async(req, res)=>{
            const id = req.params.id;
@@ -43,7 +50,23 @@ async function run() {
            const result = await productCollection.deleteOne(query);
            res.send(result);
        })
-       
+ // Update quantity
+  app.put("/product/:id", async (req, res) => {
+    const id = req.params.id;
+    const updatedStock = req.body;
+    const filter = { _id: ObjectId(id) };
+    const options = { upsert: true };
+    const updateDocument = {
+      $set: updatedStock
+  };
+    const result = await productCollection.updateOne(
+      filter,
+      updateDocument,
+      options
+    );
+    console.log("updating", id);
+    res.send(result);
+  });
 
     }
     finally {
