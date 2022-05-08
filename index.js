@@ -44,6 +44,15 @@ async function run() {
             const result = await productCollection.deleteOne(query);
             res.send(result);
         })
+        app.get('/myproduct', async(req, res)=>{
+            const email = req.query.email
+            console.log(email);
+            const query = {email}
+            const cursor = productCollection.find(query);
+            const products = await cursor.toArray();
+            res.send(products)
+            
+        })
         // Update quantity
         app.put("/product/:id", async (req, res) => {
             const id = req.params.id;
